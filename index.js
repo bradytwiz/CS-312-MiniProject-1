@@ -30,7 +30,6 @@ app.get('/post', (req, res) => {
 app.get("/edit/:id", (req, res) => {
     const { id } = req.params;
     const post = posts[id];
-    if (!post) return res.status(404).send("Post not found");
 
     res.render("post.ejs", { post, editMode: true });
 });
@@ -51,26 +50,20 @@ app.post("/submit", (req, res) => {
 app.delete("/posts/:id", (req, res) => {
     const { id } = req.params;
     delete posts[id]; 
-    res.json({ message: `Deleted post ${id}` });
 });
-
 
 app.patch("/posts/:id", (req, res) => {
     const { id } = req.params;
     const { title, content, name } = req.body;
 
     const post = posts[id];
-    if (!post) return res.status(404).json({ error: "Not found" });
 
     if (title !== undefined) post.title = title;
     if (content !== undefined) post.content = content;
     if (name !== undefined) post.name = name;
 
     post.timestamp = new Date();
-
-    res.json({ message: `Updated post ${id}`, post });
 });
-
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
