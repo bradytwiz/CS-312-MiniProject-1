@@ -9,8 +9,8 @@
         <% sortedPosts.forEach(post => { %> 
             <div class="post" id="post-<%= post.id %>">
                 <div class="post-buttons">
-                    <button onclick="handleEdit('<%= post.id %>')">Edit</button>
-                    <button onclick="handleDelete('<%= post.id %>')">Delete</button>
+                    <button onclick="editPost('<%= post.id %>')">Edit</button>
+                    <button onclick="deletePost('<%= post.id %>')">Delete</button>
                 </div>
                 <div class="post-header">
                     <h2><%= post.title %></h2>
@@ -26,23 +26,13 @@
 </div>
 </main>
 <script>
-    async function handleEdit(id) {
+    function editPost(id) {
         window.location.href = `/edit/${id}`;
     }
 
-    async function handleDelete(id) {
-        console.log("Delete:", id);
-        try {
-            const res = await fetch(`/posts/${id}`, { method: "DELETE" });
-            if (!res.ok) throw new Error("Failed to delete");
-
-
-            const data = await res.json();
-            const postElement = document.getElementById(`post-${id}`);
-            if (postElement) postElement.remove();
-        } catch (err) {
-            console.error("Error deleting post:", err);
-        }
+    function deletePost(id) {
+        fetch(`/posts/${id}`, { method: "DELETE" });
+        document.getElementById(`post-${id}`)?.remove();
     }
 </script>
 <%- include("partials/footer.ejs") %>
